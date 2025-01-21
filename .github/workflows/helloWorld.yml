@@ -15,7 +15,7 @@ jobs:
       - name: step1 checkput repo
         uses: actions/checkout@v4
       - name: step 2 print message
-        run: echo `${{toJson(github.event)}}` | jq
+        run: echo '${{toJSON(github.event)}}' | jq
         shell: bash
 
   job2:
