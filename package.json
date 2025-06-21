@@ -1,0 +1,30 @@
+{
+  "name": "actions-hero",
+  "version": "1.0.0",
+  "description": "Events in GitHub Actions are triggers that initiate workflows. Some common events include:",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --detectOpenHandles",
+    "start": "node src/index.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "check-format": "prettier --check ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.29.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.5.0",
+    "jest": "^30.0.2",
+    "node-fetch": "^2.7.0",
+    "prettier": "^3.5.3",
+    "supertest": "^7.1.1"
+  }
+}
