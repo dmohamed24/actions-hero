@@ -21,7 +21,7 @@ A typical workflow consists of:
 Example Workflow Structure:
 
 name: Example Workflow
-on: push  # Event that triggers the workflow
+on: push # Event that triggers the workflow
 
 ```
 name: Example Workflow
@@ -89,8 +89,7 @@ Offers more control and customization
 
 Ideal for running workflows in private environments or specific hardware configurations
 
-
-## Github actions YAML file Example 
+## Github actions YAML file Example
 
 ```
 name: Basic GitHub Actions Example
