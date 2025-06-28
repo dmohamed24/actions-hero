@@ -15,15 +15,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "crypto": "^1.0.1",
     "dotenv": "^16.5.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "node-fetch": "^2.7.0"
   },
   "devDependencies": {
     "eslint": "^9.29.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.5.0",
     "jest": "^30.0.2",
-    "node-fetch": "^2.7.0",
     "prettier": "^3.5.3",
     "supertest": "^7.1.1"
   }

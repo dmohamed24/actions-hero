@@ -11,7 +11,6 @@ describe('Express App', () => {
   });
 
   afterAll((done) => {
-    // Close the server properly
     server.close(done);
   });
 
