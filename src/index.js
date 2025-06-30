@@ -25,6 +25,7 @@ app.get('/', async (req, res) => {
         <body>
           <h1>Here is a random number: ${data.number}</h1>
           <p>Refresh to see a new one.</p>
+          <button onClick="window.location.reload();">Refresh Page</button>
         </body>
       </html>
     `);
