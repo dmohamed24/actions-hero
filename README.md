@@ -1,130 +1,83 @@
-# actions-hero
+## Random Number Node App
 
-## 1. Events
+This project is a simple Node.js application that serves a webpage displaying a random number every time the page is refreshed.
 
-Events in GitHub Actions are triggers that initiate workflows. Some common events include:
+### Project Overview
 
-Pull Request: Triggered when a pull request is opened, updated, or closed.
+#### 1. Node Application
 
-Push to a Branch: Triggered when changes are pushed to a specific branch.
+- A lightweight Express-based Node.js server.
+- Returns a random number in the response on every page load.
 
-Issues: Triggered when an issue is created, opened, or closed.
+#### 2. Local Development with Docker Compose
 
-## 2. Workflows
+- Uses `docker-compose.yml` to run the app locally inside a container.
+- Enables live code reloading with nodemon for rapid development.
+- Simplifies local setup by packaging dependencies and environment.
 
-A workflow is a configurable automated process that runs one or more jobs in response to an event. Each workflow must contain at least one job.
+#### 3. Dockerfile with Multi-Stage Builds
 
-### Structure of a Workflow
+- _Development Stage_: Installs all dependencies including dev dependencies, sets up nodemon, and runs the app for local development.
+- _Production Stage_: Installs only production dependencies, copies the necessary source files, and runs the app efficiently in production mode.
+- This multi-stage approach produces optimized images tailored to different environments.
 
-A typical workflow consists of:
+#### 4. GitHub Actions Workflows
 
-Example Workflow Structure:
+##### CI Workflow (ci.yml)
 
-name: Example Workflow
-on: push # Event that triggers the workflow
+- Runs on every pull request.
+- Peforms
+  - Tests: Automated testing of the application.
+  - Linting: Checks code style and quality.
+  - Formatting: Ensures consistent code formatting.
+  - Preview: Builds and pushes a Docker image tagged with the commit SHA for testing.
 
-```
-name: Example Workflow
-on: push  # Event that triggers the workflow
+##### CD Workflow (cd.yml)
 
-jobs:
-  job1:
-    runs-on: ubuntu-latest  # Runner environment
-    steps:
-      - name: Step 1
-        uses: actions/checkout@v4  # Action to checkout repo
-      - name: Step 2
-        run: echo "Hello, world!"  # Shell command
-      - name: Step 3
-        uses: some/action@v1  # Another action
+- Triggers on pushes to the main branch or can be manually triggered via the GitHub UI.
+- Runs the same tests, linting, and formatting as CI.
+- Deploys the latest Docker image to the EC2 instance for production use.
 
-  job2:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Step 1
-        uses: actions/setup-node@v3  # Setting up Node.js
-      - name: Step 2
-        run: npm install  # Installing dependencies
-      - name: Step 3
-        run: npm test  # Running tests
-```
+##### Secrets Used:
 
-### Breakdown of Workflow Components
+- `DOCKERHUB_USERNAME` & `DOCKERHUB_PASSWORD`: For Docker Hub login to push and pull images.
+- `EC2_HOST, EC2_USER, and EC2_KEY`: Credentials and host information for SSH access to the EC2 instance.
 
-Jobs: A job is a set of steps that execute on the same runner.
+#### 5. Infrastructure on AWS EC2
 
-Example: job1 and job2
+- Created an EC2 instance in the default VPC.
+- Configured Security Group to allow:
+  - HTTP (port 80), HTTPS (port 443)
+  - SSH (port 22) for remote management
+  - Application port 3000 to expose the Node.js app
+- Docker is installed on the EC2 instance.
+- The instance pulls and runs the latest Docker image on deployment.
 
-Steps: A series of tasks within a job, executed sequentially.
+### GETTING STARTED
 
-Each step can be an action (predefined functionality) or a shell command.
+#### Running locally
 
-## 3. Runners
-
-Runners are machines that execute the steps defined in a workflow. When a workflow is triggered, the jobs are assigned to runners, which sequentially execute each step within the job.
-
-### Key Points about Runners
-
-Steps within a job run sequentially from top to bottom.
-
-Jobs, however, can run in parallel or be configured to run sequentially.
-
-Execution results are logged for each step.
-
-### Types of Runners
-
-GitHub Actions offers two types of runners:
-
-GitHub-Hosted Runners (Managed by GitHub):
-
-Available environments: ubuntu-latest, windows-latest, macos-latest
-
-Automatically scaled and maintained by GitHub
-
-Self-Hosted Runners (Managed by the user):
-
-Can run on personal machines or cloud instances
-
-Offers more control and customization
-
-Ideal for running workflows in private environments or specific hardware configurations
-
-## Github actions YAML file Example
+This will start the Node.js app with live reload enabled.
 
 ```
-name: Basic GitHub Actions Example
-
-on: [push, pull_request]
-
-jobs:
-  example-job:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Run a shell command
-        run: echo "Running GitHub Actions Basics!"
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run tests
-        run: npm test
+docker-compose up
 ```
 
-## Summary
+#### Building the docker image manually
 
-Events trigger workflows (e.g., pull requests, pushes, issues).
+```
+docker build --target production -t yourusername/random-number-app .
+docker run -p 3000:3000 yourusername/random-number-app
+```
 
-Workflows consist of jobs and steps, where steps execute sequentially.
+#### Deployment
 
-Runners execute the steps within jobs, either on GitHub-hosted or self-hosted environments.
+Deployment is handled via GitHub Actions, which builds, tests, and pushes Docker images, then SSHes into the EC2 instance to pull and run the new contain
 
-By understanding these core components, you can start building and automating workflows efficiently using GitHub Actions!
+### Notes
+
+The app listens on 0.0.0.0 and port 3000 to work inside Docker and be accessible externally.
+
+The EC2 instance runs the container mapping host port 3000 to container port 3000.
+
+Manual workflow dispatch is enabled for flexible deployment triggers.
