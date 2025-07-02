@@ -43,7 +43,7 @@
     # Copy everything for dev, including source files and maybe nodemon config
     COPY . .
     
-    CMD ["npm", "run", "dev"]  # or use nodemon here
+    CMD ["npm", "run", "dev"] 
     
     # ---------- Production Stage ----------
     FROM base AS production
